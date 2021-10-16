@@ -1,4 +1,4 @@
-# divar-crawler
+# timeir-crawler
 
 simple time.ir crawler to get holidays!
 
