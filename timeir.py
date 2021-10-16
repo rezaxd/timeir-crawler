@@ -13,9 +13,9 @@ years = "1400"
 
 holidays = []
 
-for i in range(12, 13):
+for i in range(1, 13):
     if i == 12:
-        for j in range(8, 12):
+        for j in range(1, 30):
             print(f"Date: {year}-{i}-{j}")
             _day_event = req.get(f"{main_url}/{year}/{i}/{j}")
             req_text_to_bs = BS(_day_event.text, "html.parser")
@@ -32,11 +32,16 @@ for i in range(12, 13):
         for j in range(1, 32):
             print(f"Date: {year}-{i}-{j}")
             _day_event = req.get(f"{main_url}/{year}/{i}/{j}")
-            req_text_to_bs = BS(_day_event, "html.parser")
+            req_text_to_bs = BS(_day_event.text, "html.parser")
             holiday = req_text_to_bs.select(".eventHoliday")
             if len(holiday) != 0:
-                print(holiday[0].text)
-                holidays.append(holiday[0].text)
+                title = holiday[0].text
+                jalali=JalaliDate(year,i,j).to_gregorian()
+                strjalali=jalali.strftime('%Y-%m-%d')
+                print(strjalali)
+                paramReq={'title':title, 'date':strjalali}
+                req.post(f"{req_url}",data=paramReq)
+                holidays.append(title)
     if i > 6 and i != 12:
         for j in range(1, 31):
             print(f"Date: {year}-{i}-{j}")
@@ -44,7 +49,13 @@ for i in range(12, 13):
             req_text_to_bs = BS(_day_event.text, "html.parser")
             holiday = req_text_to_bs.select(".eventHoliday")
             if len(holiday) != 0:
-                holidays.append(holiday[0].text)
+                title = holiday[0].text
+                jalali=JalaliDate(year,i,j).to_gregorian()
+                strjalali=jalali.strftime('%Y-%m-%d')
+                print(strjalali)
+                paramReq={'title':title, 'date':strjalali}
+                req.post(f"{req_url}",data=paramReq)
+                holidays.append(title)
 
 
 
